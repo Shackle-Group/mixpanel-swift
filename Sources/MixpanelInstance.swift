@@ -221,6 +221,8 @@ open class MixpanelInstance: CustomDebugStringConvertible, FlushDelegate, AEDele
             self.apiToken = apiToken
         }
         mixpanelPersistence = MixpanelPersistence.init(token: self.apiToken)
+        mixpanelPersistence.migrate()
+        
         self.name = name
         self.readWriteLock = ReadWriteLock(label: "com.mixpanel.globallock")
         flushInstance = Flush(basePathIdentifier: name)
@@ -286,6 +288,8 @@ open class MixpanelInstance: CustomDebugStringConvertible, FlushDelegate, AEDele
             self.apiToken = apiToken
         }
         mixpanelPersistence = MixpanelPersistence.init(token: self.apiToken)
+        mixpanelPersistence.migrate()
+        
         self.name = name
         self.readWriteLock = ReadWriteLock(label: "com.mixpanel.globallock")
         flushInstance = Flush(basePathIdentifier: name)
