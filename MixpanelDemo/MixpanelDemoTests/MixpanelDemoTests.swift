@@ -788,10 +788,6 @@ class MixpanelDemoTests: MixpanelBaseTests {
         removeDBfile(testMixpanel.apiToken)
     }
 
-    func testTelephonyInfoInitialized() {
-        XCTAssertNotNil(MixpanelInstance.telephonyInfo, "telephonyInfo wasn't initialized")
-    }
-
     func testReadWriteLock() {
         var array = [Int]()
         let lock = ReadWriteLock(label: "test")

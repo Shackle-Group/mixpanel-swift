@@ -2,9 +2,9 @@ name: Mixpanel Swift SDK action
 
 on:
   push:
-    branches: [ master, 3.0.0.beta ]
+    branches: [ master, 3.0.0.beta, test-unit-tests]
   pull_request:
-    branches: [ master, 3.0.0.beta ]
+    branches: [ master, 3.0.0.beta, test-unit-tests]
 
 jobs:
   build:
