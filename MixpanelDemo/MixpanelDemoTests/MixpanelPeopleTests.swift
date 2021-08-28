@@ -17,6 +17,7 @@ class MixpanelPeopleTests: MixpanelBaseTests {
     func testPeopleSet() {
         let testMixpanel = Mixpanel.initialize(token: randomId(), flushInterval: 60)
         testMixpanel.identify(distinctId: "d1")
+        waitForTrackingQueue(testMixpanel)
         let p: Properties = ["p1": "a"]
         testMixpanel.people.set(properties: p)
         waitForTrackingQueue(testMixpanel)
@@ -145,6 +146,7 @@ class MixpanelPeopleTests: MixpanelBaseTests {
     func testPeopleTrackChargeZero() {
         let testMixpanel = Mixpanel.initialize(token: randomId(), flushInterval: 60)
         testMixpanel.identify(distinctId: "d1")
+        waitForTrackingQueue(testMixpanel)
         testMixpanel.people.trackCharge(amount: 0)
         waitForTrackingQueue(testMixpanel)
         let r: InternalProperties = peopleQueue(token: testMixpanel.apiToken).last!

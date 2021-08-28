@@ -93,6 +93,7 @@ class MixpanelBaseTests: XCTestCase, MixpanelDelegate {
 
     func waitForTrackingQueue(_ mixpanel: MixpanelInstance) {
         mixpanel.trackingQueue.sync() {
+            sleep(1)
             return
         }
     }

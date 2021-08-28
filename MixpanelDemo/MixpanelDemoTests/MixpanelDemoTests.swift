@@ -239,6 +239,7 @@ class MixpanelDemoTests: MixpanelBaseTests {
                            "incorrect project token in people record")
             testMixpanel.identify(distinctId: distinctId)
             waitForTrackingQueue(testMixpanel)
+            sleep(2)
             let anonymousId = testMixpanel.anonymousId
             peopleQueue_value = peopleQueue(token: testMixpanel.apiToken)
             unidentifiedQueue = unIdentifiedPeopleQueue(token: testMixpanel.apiToken)
@@ -893,7 +894,7 @@ class MixpanelDemoTests: MixpanelBaseTests {
     func testReadWriteMultiThreadShouldNotCrash() {
         let concurentQueue = DispatchQueue(label: "multithread", attributes: .concurrent)
         let testMixpanel = Mixpanel.initialize(token: randomId(), flushInterval: 60)
-        
+
         for n in 1...10 {
             concurentQueue.async {
                 testMixpanel.track(event: "event\(n)")
