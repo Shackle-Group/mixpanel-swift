@@ -58,6 +58,7 @@ class MixpanelDemoTests: MixpanelBaseTests {
             testMixpanel.track(event: "event \(i)")
         }
         flushAndWaitForTrackingQueue(testMixpanel)
+        sleep(1)
         XCTAssertTrue(eventQueue(token: testMixpanel.apiToken).isEmpty,
                       "events should have been flushed")
 
@@ -65,6 +66,7 @@ class MixpanelDemoTests: MixpanelBaseTests {
             testMixpanel.track(event: "event \(i)")
         }
         flushAndWaitForTrackingQueue(testMixpanel)
+        sleep(1)
         XCTAssertTrue(eventQueue(token: testMixpanel.apiToken).isEmpty,
                       "events should have been flushed")
         removeDBfile(testMixpanel.apiToken)
@@ -341,19 +343,19 @@ class MixpanelDemoTests: MixpanelBaseTests {
         waitForTrackingQueue(testMixpanel)
         testMixpanel.createAlias(alias, distinctId: testMixpanel.distinctId)
         waitForTrackingQueue(testMixpanel)
-        var mixpanelIdentity = testMixpanel.mixpanelPersistence.loadIdentity()
+        var mixpanelIdentity = MixpanelPersistence.loadIdentity(apiToken: testMixpanel.apiToken)
         XCTAssertTrue(distinctId == mixpanelIdentity.distinctID && distinctId == mixpanelIdentity.peopleDistinctID && distinctId == mixpanelIdentity.userId && alias == mixpanelIdentity.alias)
         testMixpanel.archive()
         waitForTrackingQueue(testMixpanel)
         testMixpanel.unarchive()
         waitForTrackingQueue(testMixpanel)
-        mixpanelIdentity = testMixpanel.mixpanelPersistence.loadIdentity()
-        XCTAssertTrue(testMixpanel.distinctId == mixpanelIdentity.distinctID && testMixpanel.people.distinctId == mixpanelIdentity.peopleDistinctID && testMixpanel.anonymousId == mixpanelIdentity.anoymousId &&
+        mixpanelIdentity = MixpanelPersistence.loadIdentity(apiToken: testMixpanel.apiToken)
+        XCTAssertTrue(testMixpanel.distinctId == mixpanelIdentity.distinctID && testMixpanel.people.distinctId == mixpanelIdentity.peopleDistinctID && testMixpanel.anonymousId == mixpanelIdentity.anonymousId &&
                         testMixpanel.userId == mixpanelIdentity.userId && testMixpanel.alias == mixpanelIdentity.alias)
-        testMixpanel.mixpanelPersistence.deleteMPUserDefaultsData()
+        MixpanelPersistence.deleteMPUserDefaultsData(apiToken: testMixpanel.apiToken)
         waitForTrackingQueue(testMixpanel)
-        mixpanelIdentity = testMixpanel.mixpanelPersistence.loadIdentity()
-        XCTAssertTrue("" == mixpanelIdentity.distinctID && nil == mixpanelIdentity.peopleDistinctID && nil == mixpanelIdentity.anoymousId && nil == mixpanelIdentity.userId && nil == mixpanelIdentity.alias)
+        mixpanelIdentity = MixpanelPersistence.loadIdentity(apiToken: testMixpanel.apiToken)
+        XCTAssertTrue("" == mixpanelIdentity.distinctID && nil == mixpanelIdentity.peopleDistinctID && nil == mixpanelIdentity.anonymousId && nil == mixpanelIdentity.userId && nil == mixpanelIdentity.alias)
         removeDBfile(testMixpanel.apiToken)
     }
 
@@ -772,17 +774,17 @@ class MixpanelDemoTests: MixpanelBaseTests {
         testMixpanel.time(event: "Time Event B")
         testMixpanel.time(event: "Time Event C")
         waitForTrackingQueue(testMixpanel)
-        var testTimedEvents = testMixpanel.mixpanelPersistence.loadTimedEvents()
+        var testTimedEvents = MixpanelPersistence.loadTimedEvents(apiToken: testMixpanel.apiToken)
         XCTAssertTrue(testTimedEvents.count == 3, "Each call to time() should add an event to timedEvents")
         XCTAssertNotNil(testTimedEvents["Time Event A"], "Keys in timedEvents should be event names")
         testMixpanel.clearTimedEvent(event: "Time Event A")
         waitForTrackingQueue(testMixpanel)
-        testTimedEvents = testMixpanel.mixpanelPersistence.loadTimedEvents()
+        testTimedEvents = MixpanelPersistence.loadTimedEvents(apiToken: testMixpanel.apiToken)
         XCTAssertNil(testTimedEvents["Time Event A"], "clearTimedEvent should remove key/value pair")
         XCTAssertTrue(testTimedEvents.count == 2, "clearTimedEvent shoud remove only one key/value pair")
         testMixpanel.clearTimedEvents()
         waitForTrackingQueue(testMixpanel)
-        XCTAssertTrue(testMixpanel.mixpanelPersistence.loadTimedEvents().count == 0, "clearTimedEvents should remove all key/value pairs")
+        XCTAssertTrue(MixpanelPersistence.loadTimedEvents(apiToken: testMixpanel.apiToken).count == 0, "clearTimedEvents should remove all key/value pairs")
         removeDBfile(testMixpanel.apiToken)
     }
 
@@ -976,3 +978,4 @@ class MixpanelDemoTests: MixpanelBaseTests {
     }
     
 }
+
