@@ -297,8 +297,7 @@ class MixpanelDemoTests: MixpanelBaseTests {
 
         testMixpanel.identify(distinctId: distinctId)
         waitForTrackingQueue(testMixpanel)
-    
-
+        sleep(1)
         let e: InternalProperties = eventQueue(token: testMixpanel.apiToken).last!
         XCTAssertEqual(e["event"] as? String, "$identify", "incorrect event name")
         let p: InternalProperties = e["properties"] as! InternalProperties
